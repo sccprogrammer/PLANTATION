@@ -1,0 +1,559 @@
+﻿
+@{
+    ViewBag.Title = "Catu Beras";
+    ViewBag.Root = "Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}  
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card info-card  ">
+
+            <div class="card-body" id="divData">
+                <div class="row mb-2">
+                    <div class="col-lg-6 ">
+                        <button class="btn  btn-primary btn-sm" id="btnAdd" onclick="AddNewData(0)" data-toggle="modal" data-target="#myModal" type="button"><i class="bi bi-plus-square"></i> Add</button>
+                    </div>
+                    <div class="col-lg-6 text-end">
+                        <button class="btn  btn-success btn-sm" id="btnExportExcel" type="button"><i class="bi bi-file-earmark-excel-fill"></i> Export </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-10">
+                    </div>
+                    <div class="col-lg-2 float-end">
+                        <div class="input-group">
+                            <select class="select2 form-control" name="cboTahunSearch" id="cboTahunSearch">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-3">
+                    <div class="col-lg-12">
+                        <table id="tableID" class="table table-striped table-bordered" style="width:100% ;font-family:'Calibri';">
+                            <thead>
+                                <tr role="row">
+                                    <th style="text-align:center;">
+                                        Status
+                                    </th>
+                                    <th style="text-align:center;">
+                                        Tahun
+                                    </th>
+                                    <th style="text-align:center;">
+                                        Pekerja (Kg)
+                                    </th>
+                                    <th style="text-align:center;">
+                                        Tanggungan (Kg)
+                                    </th>
+                                    <th style="text-align:center;">
+                                        Total (Kg)
+                                    </th>
+                                    <th style="text-align:center;">
+                                        Nilai Rp
+                                    </th>
+                                    <th style="text-align:center;">
+                                        Action
+                                    </th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body" id="divForm">
+                <form id="formData">
+                    <div class="body">
+                        <div class="row mb-3">
+                            <div class="col-sm-9">
+                                <button type="button" class="btn btn-danger" id="backData" onclick="backForm()"><i class="bi bi-arrow-left-square"></i> Back</button>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <input type="text" id="txtIdCatuBeras" name="txtIdCatuBeras" style="display:none" class="form-control">
+                            <label for="txtHargaBeras" class="col-sm-3 col-form-label">Harga Beras /1.Kg</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="txtHargaBeras" name="txtHargaBeras" class="numberonly form-control">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="cboTahun" class="col-sm-3 col-form-label">Tahun</label>
+                            <div class="col-sm-9">
+                                <select id="cboTahun" name="cboTahun" class="select2 form-control"></select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="cboStatusMartial" class="col-sm-3 col-form-label">Status</label>
+                            <div class="col-sm-9">
+                                <select id="cboStatusMartial" name="cboStatusMartial" class="select2 form-control"></select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="txtPekerja" class="col-sm-3 col-form-label">Jatah Pekerja /Kg</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="txtPekerja" name="txtPekerja" maxlength="15" class="numberonly form-control">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="txtTanggungan" class="col-sm-3 col-form-label">Jatah Kg Pertanggungan (Kg)</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="txtTanggungan" name="txtTanggungan" maxlength="15" class="numberonly form-control">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="txtTotal" class="col-sm-3 col-form-label">Total Keseluruhan (Kg) </label>
+                            <div class="col-sm-9">
+                                <input type="text" id="txtTotal" name="txtTotal" maxlength="15" readonly class="numberonly form-control">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="txtNilaiHarga" class="col-sm-3 col-form-label">Total Nilai Harga   </label>
+                            <div class="col-sm-9">
+                                <input type="text" id="txtNilaiHarga" name="txtNilaiHarga" maxlength="15" readonly class="numberonly form-control">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-9">
+                                <button type="button" class="btn btn-primary" id="InsertData">Save</button>
+                                <button type="button" class="btn btn-primary" id="UpdateData">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="KonfirmasiDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="KonfirmasiDelete" role="dialog" aria-hidden="true" data-tor-parent="show">
+    <div class="modal-dialog modal-dialog-centered no-transform">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delete Catu Beras</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Data akan dihapus?</h4>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" id="CancelDelete" data-dismiss="modal">Cancel</a>
+                <a href="#" class="btn btn-primary" id="ConfirmDelete">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    div.dataTables_info {
+        padding-top: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        font-style: italic;
+        color: #969696;
+    }
+
+    a.page-link {
+        font-size: 13px;
+        font-weight: 600;
+        margin-top: 5px;
+    }
+
+    div.dataTables_wrapper div.dataTables_filter input {
+        margin-left: 0.5em;
+        display: inline-block;
+        width: 300px;
+        height: 20px;
+    }
+
+    readonly {
+        background: #fefe;
+    }
+</style>
+<script>
+    var Table;
+    let CurrTahun = new Date().getFullYear();
+    $(document).ready(function () {
+
+        populateTahun('cboTahunSearch', CurrTahun);
+        loadData();
+
+        $('.select2').select2({ container: 'body' });
+
+        $("#formData").validate(
+        {
+            rules:{   //Validation rules work on name attribute
+                 txtHargaBeras:{  //Condition Area
+                       required:true
+                },
+                cboTahun: { 
+                       required:true
+                },
+                cboStatusMartial: {  
+                       required:true
+                },
+                txtPekerja: {  
+                       required:true
+                },
+                txtTanggungan: {  
+                       required:true
+                }
+             
+            },
+            messages: {
+                txtHargaBeras: {
+                     required: "Harga Beras harus diisi"
+                },
+                cboTahun: {
+                     required: "Tahun harus diisi"
+                },
+                cboStatusMartial: {
+                     required: "Status harus diisi"
+                },
+                txtPekerja: {
+                     required: "Jatah Pekerja /Kg harus diisi"
+                },
+                txtTanggungan: {
+                     required: "Jatah Kg Pertanggungan harus diisi"
+                }
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-control').removeClass('has-success').addClass('has-error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-control').removeClass('has-error').addClass('has-success');
+            },
+            errorPlacement: function (error, element) {
+    		    if(element.hasClass('select2') && element.next('.select2-container').length) {
+        	        error.insertAfter(element.next('.select2-container'));
+                } 
+                else {
+                    error.insertAfter(element);
+                }
+            }
+        });
+
+         $("#tableID").dataTable({
+            bDestroy: true,
+            data: [],
+            columns: [               
+                { "data": "StatusMartial", className: "text-center" },
+                { "data": "Tahun", className: "text-center" },
+                { "data": "Pekerja", className: "text-center" },
+                { "data": "Tanggungan", className: "text-center" },
+                { "data": "Total", className: "text-center" },  
+                {
+                    "data": "NilaiHarga", className: "text-end", "render": function (data, type, row) {
+                        return parseFloat(row.NilaiHarga).toLocaleString('id-ID');
+                    }
+                },
+                {
+                    "data": "Action",  className: "text-center", "render": function (data, type, row) {
+                        //if ('@ViewBag.AllowDelete' == '0') {
+
+                        //    return '<a href="#" class="fa fa-pencil" onclick="EditRecord(\'' + row.IDCatuBeras + '\')" />  &nbsp; | &nbsp; <a href="javascript:void(0)" class="fa fa-trash-o disable"  />'
+                        //} else {
+
+                            return '<a href="#" Class="btn btn-sm btn-info" onclick="EditRecord(\'' + row.IdCatuBeras + '\')" /><i class="bi bi-pencil-square" ></i></a> <a Class="btn btn-sm btn-danger" onclick="DeleteRecord(\'' + row.IdCatuBeras + '\')"/><i class="bi  bi-eraser-fill" ></i></a>';
+                        //}
+                    }
+                },
+            ],
+
+            //rowCallback: function (row, data) { responsiveHelper_dt_basic.createExpandIcon(row) },
+            filter: true,
+            info: true,
+            ordering: true,
+            //processing: true,
+            //retrieve: true,
+            bLengthChange: false,
+            //lengthMenu: [[15, 20, -1], [15, 20, "All"]],
+            //bFilter: true,
+            //bSort: true,
+            //bPaginate: true,
+            //scrollX: true,
+            //scrollX: "100%",
+            searching:true,
+            //autoWidth: true,
+            language: { search: '', searchPlaceholder: "Search..." },
+            pageLength:10,
+            //preDrawCallback: function () {
+            //    // Initialize the responsive datatables helper once.
+            //    if (!responsiveHelper_dt_basic) {
+            //        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#tableID'), breakpointDefinition);
+            //    }
+            //},
+            //drawCallback: function (oSettings) {
+            //    responsiveHelper_dt_basic.respond();
+            //}
+         });
+
+        function loadData() {
+            var data = "Tahun="+ $("#cboTahunSearch").val();
+            $.ajax({
+                url: '@Url.Action("GetList","CatuBeras")',
+                type: "GET",
+                data: data,
+            }).done(function (result) {
+                $("#divData").show();
+                $("#divForm").hide();
+                $("#tableID").DataTable().clear();
+                $("#tableID").DataTable().rows.add(result).draw(false);
+                $("#tableID").DataTable().columns.adjust().draw();
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // needs to implement if it fails
+            });
+        }
+
+         $('.numberonly').keypress(function (e) {
+             var charCode = (e.which) ? e.which : event.keyCode
+             if (String.fromCharCode(charCode).match(/[^\d.]/g))
+                 return false;
+         });
+
+         $("#InsertData").click(function () {
+            if ($("#formData").valid()) {
+                var dataObj = {
+                    HargaBeras : $('#txtHargaBeras').val(),
+                    Tahun: $('#cboTahun').val(),
+                    StatusMartial: $('#cboStatusMartial').val(),
+                    Pekerja: $('#txtPekerja').val(),
+                    Tanggungan: $('#txtTanggungan').val(),
+                    HargaBeras: $('#txtHargaBeras').val()
+                };
+                $.ajax({
+                    type: "Post",
+                    url: "@Url.Action("InsertData", "CatuBeras")",
+                    data: JSON.stringify(dataObj),
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        //debugger;
+                        if (!data.Status) {
+                            Swal.fire({ icon: "error", title: data.Message, showConfirmButton: false, timer: 2000 });
+                        } else {
+                            Swal.fire({ icon: "success", title: "Data Saved Success!", showConfirmButton: false, timer: 2000 });
+                            loadData();
+                            $('#divData').show();
+                            $('#divForm').hide();
+                        }
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                         alert(xhr.responseText);
+                    }
+                })
+            }
+
+         });
+
+        $("#UpdateData").click(function () {
+            if ($("#formData").valid()) {
+                //var data = $("#formData").serialize();
+               var dataObj = {
+                    IdCatuBeras: $('#txtIdCatuBeras').val(),
+                    HargaBeras : $('#txtHargaBeras').val(),
+                    Tahun: $('#cboTahun').val(),
+                    StatusMartial: $('#cboStatusMartial').val(),
+                    Pekerja: $('#txtPekerja').val(),
+                    Tanggungan: $('#txtTanggungan').val(),
+                    HargaBeras: $('#txtHargaBeras').val()
+                };
+                $.ajax({
+                    type: "Post",
+                    url: "@Url.Action("UpdateData", "CatuBeras")",
+                    data: JSON.stringify(dataObj),
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        //debugger;
+                        if (!data.Status) {
+                            Swal.fire({ icon: "error", title: data.Message, showConfirmButton: false, timer: 2000 });
+                        } else {
+                            Swal.fire({ icon: "success", title: "Data Saved Success!", showConfirmButton: false, timer: 2000 });
+                            loadData();
+                            $('#divData').show();
+                            $('#divForm').hide();
+                        }
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                         alert(xhr.responseText);
+                    }
+                })
+            }
+
+        });
+
+          $("#ConfirmDelete").click(function () {
+                var IdCatuBeras = $("#txtIdCatuBeras").val();
+              $.ajax({
+                  type: "Post",
+                  url: '@Url.Action("DeleteData", "CatuBeras")?IdCatuBeras='+IdCatuBeras,
+                        success: function (data) {
+                            debugger;
+                            if (!data.Status) {
+                                window.alert(response.ErrorMessage, 'Warning', { timeOut: 3000, "closeButton": true });
+                            } else {
+                                Swal.fire({ icon: "success", title: "Delete Data Success!", showConfirmButton: false, timer: 1800 });
+                                $("#KonfirmasiDelete").modal("hide");
+                                loadData();
+                            }
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                             alert(xhr.responseText);
+                        }
+                    })
+          });
+
+         $("#txtHargaBeras").keyup(function () {
+             HitungTotal();
+         });
+
+         $("#cboTahunSearch").change(function () {
+             loadData();
+         });
+
+         $('#txtPekerja').keyup((e) => {
+             HitungTotal();
+         });
+        
+         $('#txtTanggungan').keyup((e) => {
+             HitungTotal();
+         });
+
+        $('#CancelDelete').click(() => {
+            $("#KonfirmasiDelete").modal("hide");
+        });
+    });
+
+      // Hitung Total
+    function HitungTotal() {
+        var pekerja =   $('#txtPekerja').val();
+        var tanggungan =$('#txtTanggungan').val();
+        pekerja = isNaN(parseFloat(pekerja)) ? 0 : parseFloat(pekerja);
+        tanggungan = isNaN(parseFloat(tanggungan)) ? 0 : parseFloat(tanggungan);
+        var total =  pekerja +  tanggungan;
+        $('#txtTotal').val(String(total));
+
+        var hargaBeras = $("#txtHargaBeras").val();
+        var totalHarga = total * parseFloat(hargaBeras);
+        $('#txtNilaiHarga').val(String(totalHarga));
+
+    }
+     // Add New
+    function AddNewData() {
+        resetForm();
+
+        populateTahun('cboTahun', CurrTahun);
+        populateStatusMartial();
+        populateHargaBeras();
+        $('#cboTahun').focus();
+        $("#divData").hide();
+        $("#divForm").show();
+        $('#InsertData').show();
+        $('#UpdateData').hide();
+    }
+
+    function populateTahun(cbotahun, tahunGet)
+    {
+        $('#'+cbotahun+'').empty();
+        $('#'+cbotahun+'').append('<option value="" disabled selected>Pilih Tahun</option>');
+        var awal = 2015;
+        var akhir = 2040;
+        while (awal < akhir) {
+            if (tahunGet == awal) {
+                $('#'+cbotahun+'').append('<option value="' + awal + '" selected>' + awal + '</option>');
+            } else {
+                $('#'+cbotahun+'').append('<option value="' + awal + '">' + awal + '</option>');
+            }
+
+            awal++;
+        }
+
+    }
+
+    function resetForm() {
+            var $form = $('#formData');
+            $form.validate().resetForm();
+            //$("#formData").find('.form-group').removeClass("state-error");
+            //$("#formData").find('.form-group').removeClass("state-success");
+
+            $('#txtIdCatuBeras').val('');
+            $('#txtHargaBeras').val('');
+            $('#cboTahun').val('');
+            $('#cboStatusMartial').val('');
+            $('#txtPekerja').val('');
+            $('#txtTanggungan').val('');
+            $('#txtTotal').val('');
+            $('#txtNilaiHarga').val('');
+    }
+
+    function DeleteRecord(id) {
+        $("#txtIdCatuBeras").val(id);
+        $("#KonfirmasiDelete").modal("show");
+    }
+
+    function backForm() {
+        $("#divData").show();
+        $("#divForm").hide();
+    }
+
+    function EditRecord(id) {
+        resetForm();
+        populateTahun('cboTahun', '')
+        populateStatusMartial();
+        var url = '@Url.Action("GetDataByCode", "CatuBeras")';
+        var data = "IdCatuBeras="+id+"&Tahun="+ $("#cboTahunSearch").val();
+
+        $("#divData").hide();
+        $("#divForm").show();
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: data,
+            success: function (data) {
+                var obj = JSON.parse(data);
+                $("#txtIdCatuBeras").val(obj.IdCatuBeras);
+                $("#cboTahun").val(obj.Tahun).trigger("change");
+                $("#cboStatusMartial").val(obj.StatusMartial).trigger("change");
+                $("#txtPekerja").val(obj.Pekerja);
+                $("#txtTanggungan").val(obj.Tanggungan);
+                $("#txtHargaBeras").val(obj.HargaBeras);
+                HitungTotal();
+                $('#InsertData').hide();
+                $('#UpdateData').show();
+            }
+        })
+    }
+
+    function populateStatusMartial()
+    {
+        var url = '@Url.Action("GetList", "Martial")';
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                $('#cboStatusMartial').empty();
+                $('#cboStatusMartial').append('<option value="" disabled selected>Pilih Status</option>');
+                    $.each(data, function (i, bind) { 
+                         $("#cboStatusMartial").append('<option value="' + bind.KodeMartial + '">' + bind.KodeMartial + '</option>');
+                       
+                    });
+            }
+        })
+
+    }
+
+    function populateHargaBeras()
+    {
+        var url = '@Url.Action("GetList", "SetVariable")';
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {               
+                $("#txtHargaBeras").val(data[0].HargaBeras);
+            }
+        })
+
+    }
+</script>

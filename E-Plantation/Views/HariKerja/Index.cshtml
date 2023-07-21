@@ -1,0 +1,854 @@
+﻿
+@{
+    ViewBag.Title = "Hari Kerja";
+    ViewBag.Root = "Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="pagetitle">
+    <h1>Master Hari Kerja</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Master</a></li>
+            <li class="breadcrumb-item active">Master Hari Kerja</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card info-card  ">
+
+            <div class="card-body" id="divData">
+                <div class="row mb-2">
+                    <div class="col-lg-6 ">
+                        <button class="btn  btn-primary btn-sm" id="btnAdd" onclick="AddNewData(0)" data-toggle="modal" data-target="#myModal" type="button"><i class="bi bi-plus-square"></i> Add</button>
+                    </div>
+                    <div class="col-lg-6 text-end">
+                        <button class="btn  btn-success btn-sm" id="btnExportExcel" type="button"><i class="bi bi-file-earmark-excel-fill"></i> Export </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-10">
+                    </div>
+                    <div class="col-lg-2 float-end">
+                        <div class="input-group">
+                            <select class="select2 form-control" name="cboTahunSearch" id="cboTahunSearch">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-3">
+                    <div class="col-lg-12">
+                        <table id="tableID" class="table table-striped table-bordered" style="width:100% ;font-family:'Calibri';">
+                            <thead>
+                                <tr role="row">
+
+                                    <th style="text-align:center;">
+                                        Preview Hari Libur
+                                    </th>
+                                    <th style="text-align:center;">
+                                        Tahun
+                                    </th>
+                                    <th style="text-align:center;">
+                                        Bulan
+                                    </th>
+                                    <th style="text-align:center;">
+                                        Hari Kerja
+                                    </th>
+                                    <th style="text-align:center;">
+                                        Hari Libur
+                                    </th>
+                                    <th style="text-align:center;">
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body" id="divForm">
+
+                <div class="body">
+                    <div class="row mb-3">
+                        <div class="col-sm-9">
+                            <button type="button" class="btn btn-danger" id="backData" onclick="backForm()"><i class="bi bi-arrow-left-square"></i> Back</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="btnHKTab" data-bs-toggle="tab" data-bs-target="#MainContent_hktab" type="button" role="tab" aria-controls="MainContent_hktab" aria-selected="true">Hari Kerja (HK)</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="btnHLTab" data-bs-toggle="tab" data-bs-target="#MainContent_hltab" type="button" role="tab" aria-controls="MainContent_hltab" aria-selected="false">Hari libur</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+
+                                <div class="tab-pane fade " runat="server" id="hktab" role="tabpanel" aria-labelledby="hktab">
+                                    <form id="formData">
+                                        <input type="text" style="display:none" name="IdHK" id="IdHK">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card info-card  pt-3">
+                                                    <div class="card-body">
+                                                        <div class="row mb-3">
+                                                            <label for="cboTahun" class="col-sm-3 col-form-label">Tahun</label>
+                                                            <div class="col-sm-9">
+                                                                <select id="cboTahun" name="cboTahun" required class="select2 form-select" style="width:100%">
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <label for="cboBulan" class="col-sm-3 col-form-label">Bulan</label>
+                                                            <div class="col-sm-9">
+                                                                <select id="cboBulan" name="cboBulan" required class="select2 form-select" style="width:100%"></select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <label for="txtharikerja" class="col-sm-3 col-form-label">Hari Kerja</label>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" id="txtHariKerja" name="txtHariKerja" MaxLength="6" class="numberonly form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <div class="col-sm-9">
+                                                                <button type="button" class="btn btn-primary" id="InsertData">Save</button>
+                                                                <button type="button" class="btn btn-primary" id="UpdateData">Update</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade" id="hltab" role="tabpanel" aria-labelledby="hltab">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="card info-card  pt-3">
+                                                <div class="card-body">
+                                                    <h4 class="card-title">Data Hari Libur</h4>
+                                                    <div class="row" id="inputHariLibur">
+                                                        <form id="formDataHariLibur">
+                                                            <input type="text" style="display:none" name="txtIdHariLibur" id="txtIdHariLibur">
+                                                            <div class="row mb-3">
+                                                                <label for="txttgllibur" class="col-sm-3 col-form-label">Tgl Hari Libur</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control dateselect" name="txtTglHariLibur" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" MaxLength="10" id="txtTglHariLibur">
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mb-3">
+                                                                <label for="txtketerangan" class="col-sm-3 col-form-label">Keterangan</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="txtKeterangan" name="txtKeterangan">
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mb-3">
+                                                                <div class="col-sm-10">
+                                                                    <button type="button" class="btn btn-primary" id="InsertDataHariLibur">Save</button>
+                                                                    <button type="button" class="btn btn-primary" id="UpdateDataHariLibur">Update</button>
+                                                                    <button type="button" class="btn btn-danger" id="CancelDataHariLibur">Cancel</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="row" id="dataHariLibur">
+                                                        <div class="row pt-3">
+                                                            <div class="col-sm-12"> 
+                                                                <button class="btn  btn-primary btn-sm" id="btnAddHariLibur" onclick="AddNewDataHariLibur(0)"  type="button"><i class="bi bi-plus-square"></i> Add Libur</button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row pt-3">
+                                                            <div class="col-lg-12">
+                                                                <table id="tableIDHariLibur" class="table table-striped table-bordered" style="width:100% ;font-family:'Calibri';">
+                                                                    <thead>
+                                                                        <tr role="row">
+
+                                                                            <th style="text-align:center;">
+                                                                                Tgl Libur
+                                                                            </th>
+                                                                            <th style="text-align:center;">
+                                                                                Keterangan
+                                                                            </th>
+                                                                            <th style="text-align:center;">
+                                                                                Action
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+
+                                                                    <tbody></tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="KonfirmasiDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="KonfirmasiDelete" role="dialog" aria-hidden="true" data-tor-parent="show">
+    <div class="modal-dialog modal-dialog-centered no-transform">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delete Hari Kerja</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Data akan dihapus?</h4>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" data-dismiss="modal" id="CancelDelete">Cancel</a>
+                <a href="#" class="btn btn-primary" id="ConfirmDelete">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="KonfirmasiDeleteHariLibur" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="KonfirmasiDeleteHariLibur" role="dialog" aria-hidden="true" data-tor-parent="show">
+    <div class="modal-dialog modal-dialog-centered no-transform">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delete Hari Libur</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Data akan dihapus?</h4>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" data-dismiss="modal" id="CancelDeleteHariLibur">Cancel</a>
+                <a href="#" class="btn btn-primary" id="ConfirmDeleteHariLibur">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    div.dataTables_info {
+        padding-top: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        font-style: italic;
+        color: #969696;
+    }
+
+    a.page-link {
+        font-size: 13px;
+        font-weight: 600;
+        margin-top: 5px;
+    }
+</style>
+<script>
+    var Table;
+    let CurrTahun = new Date().getFullYear();
+    $(document).ready(function () {
+
+        populateTahun('cboTahunSearch', CurrTahun);
+        loadData();
+
+        $('.select2').select2({ container: 'body' });
+
+
+        $("#formData").validate(
+        {
+            rules:{   //Validation rules work on name attribute
+                 txtHariKerja:{  //Condition Area
+                       required:true
+                 }
+            },
+            messages: {
+                cboTahun: {
+                     required: "Tahun harus diisi"
+                },
+                cboBulan: {
+                     required: "Bulan harus diisi"
+                },
+                txtHariKerja: {
+                     required: "Hari Kerja harus diisi"
+                }
+
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-control').removeClass('has-success').addClass('has-error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-control').removeClass('has-error').addClass('has-success');
+            },
+            errorPlacement: function (error, element) {
+    		        if(element.hasClass('select2') && element.next('.select2-container').length) {
+        	        error.insertAfter(element.next('.select2-container'));
+                }
+                else {
+                    error.insertAfter(element);
+                }
+            }
+        });
+
+        $("#formDataHariLibur").validate(
+        {
+            rules:{   //Validation rules work on name attribute
+                txtTglHariLibur:{  //Condition Area
+                       required:true
+                },
+                txtKeterangan: {  //Condition Area
+                       required:true
+                }
+            },
+            messages: {
+                txtTglHariLibur: {
+                     required: "Tgl Hari Libur harus diisi"
+                },
+                txtKeterangan: {
+                     required: "Keterangan harus diisi"
+                }
+
+            }
+
+        });
+
+        $("#tableID").dataTable({
+            bDestroy: true,
+            data: [],
+            columns: [
+                {
+                    "data": "PreviewHariLibur", className: "text-center", "render": function (data, type, row) {
+                        return '<button class="btn btn-primary btn-sm" ToolTip="Preview Hari Libur" onclick="DetailHariLibur(\'' + row.IDHK + '\')"><i class="bi  bi-eye-fill" ></i></button>'
+                    }
+                },
+                { "data": "Tahun", className: "text-center" },
+                { "data": "NamaBulan", className: "text-center" },
+                { "data": "HariKerja", className: "text-center" },
+                { "data": "HariLibur", className: "text-center" },
+                {
+                    "data": "Action",  className: "text-center", "render": function (data, type, row) {
+                        //if ('@ViewBag.AllowDelete' == '0') {
+
+                        //    return '<a href="#" class="fa fa-pencil" onclick="EditRecord(\'' + row.IDHariKerja + '\')" />  &nbsp; | &nbsp; <a href="javascript:void(0)" class="fa fa-trash-o disable"  />'
+                        //} else {
+
+                            return '<a href="#" Class="btn btn-sm btn-info" onclick="EditRecord(\'' + row.IDHK + '\')" /><i class="bi bi-pencil-square" ></i></a> <a Class="btn btn-sm btn-danger" onclick="DeleteRecord(\'' + row.IDHK + '\')"/><i class="bi  bi-eraser-fill" ></i></a>';
+                        //}
+                    }
+                },
+            ],
+
+            //rowCallback: function (row, data) { responsiveHelper_dt_basic.createExpandIcon(row) },
+            filter: true,
+            info: true,
+            ordering: true,
+            //processing: true,
+            //retrieve: true,
+            bLengthChange: false,
+            //lengthMenu: [[15, 20, -1], [15, 20, "All"]],
+            //bFilter: true,
+            //bSort: true,
+            //bPaginate: true,
+            //scrollX: true,
+            //scrollX: "100%",
+            searching:false,
+            //autoWidth: true,
+            pageLength:12,
+            //preDrawCallback: function () {
+            //    // Initialize the responsive datatables helper once.
+            //    if (!responsiveHelper_dt_basic) {
+            //        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#tableID'), breakpointDefinition);
+            //    }
+            //},
+            //drawCallback: function (oSettings) {
+            //    responsiveHelper_dt_basic.respond();
+            //}
+         });
+
+
+        function loadData() {
+            var data = "Tahun="+ $("#cboTahunSearch").val();
+            $.ajax({
+                url: '@Url.Action("GetList","HariKerja")',
+                type: "GET",
+                data: data,
+            }).done(function (result) {
+                $("#divData").show();
+                $("#divForm").hide();
+                $("#tableID").DataTable().clear();
+                $("#tableID").DataTable().rows.add(result).draw(false);
+                $("#tableID").DataTable().columns.adjust().draw();
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // needs to implement if it fails
+            });
+        }
+
+         $('.numberonly').keypress(function (e) {
+             var charCode = (e.which) ? e.which : event.keyCode
+             if (String.fromCharCode(charCode).match(/[^\d.]/g))
+                 return false;
+         });
+
+         $("#InsertData").click(function () {
+            if ($("#formData").valid()) {
+                //var data = $("#formData").serialize();
+                var data = "Tahun=" + $("#cboTahun").val() + "&Bulan=" + $("#cboBulan").val() + "&HariKerja=" + $("#txtHariKerja").val()
+                $.ajax({
+                    type: "Post",
+                    url: "@Url.Action("InsertData", "HariKerja")",
+                    data: data,
+                    success: function (data) {
+                        //debugger;
+                        if (!data.Status) {
+                            Swal.fire({ icon: "error", title: data.Message, showConfirmButton: false, timer: 2000 });
+                        } else {
+                            Swal.fire({ icon: "success", title: "Data Saved Success!", showConfirmButton: false, timer: 2000 });
+                            loadData();
+                            $('#divData').show();
+                            $('#divForm').hide();
+                        }
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                         alert(xhr.responseText);
+                    }
+                })
+            }
+
+         });
+
+        $("#UpdateData").click(function () {
+            if ($("#formData").valid()) {
+                //var data = $("#formData").serialize();
+               var dataObj = {
+                    IDHK: $('#IdHK').val(),
+                    Tahun: $('#cboTahun').val(),
+                    Bulan: $('#cboBulan').val(),
+                    HariKerja: $('#txtHariKerja').val(),
+                };
+                $.ajax({
+                    type: "Post",
+                    url: "@Url.Action("UpdateData", "HariKerja")",
+                    data: JSON.stringify(dataObj),
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        //debugger;
+                        if (!data.Status) {
+                            Swal.fire({ icon: "error", title: data.Message, showConfirmButton: false, timer: 2000 });
+                        } else {
+                            Swal.fire({ icon: "success", title: "Data Saved Success!", showConfirmButton: false, timer: 2000 });
+                            loadData();
+                            $('#divData').show();
+                            $('#divForm').hide();
+                        }
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                         alert(xhr.responseText);
+                    }
+                })
+            }
+
+        });
+
+          $("#ConfirmDelete").click(function () {
+                var IdHK = $("#IdHK").val();
+              $.ajax({
+                  type: "Post",
+                  url: '@Url.Action("DeleteData", "HariKerja")?IdHK='+IdHK,
+                        success: function (data) {
+                            debugger;
+                            if (!data.Status) {
+                                window.alert(response.ErrorMessage, 'Warning', { timeOut: 3000, "closeButton": true });
+                            } else {
+                                Swal.fire({ icon: "success", title: "Delete Data Success!", showConfirmButton: false, timer: 1800 });
+                                $("#KonfirmasiDelete").modal("hide");
+                                loadData();
+                            }
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                             alert(xhr.responseText);
+                        }
+                    })
+          });
+
+         $("#cboTahunSearch").change(function () {
+             loadData();
+         });
+
+        $('#CancelDelete').click(() => {
+            $("#KonfirmasiDelete").modal("hide");
+        });
+
+
+        //Hari Libur
+
+        $("#tableIDHariLibur").dataTable({
+            bDestroy: true,
+            data: [],
+            columns: [
+                { "data": "TglHariLibur", className: "text-center" },
+                { "data": "Keterangan", className: "text-center" },
+                {
+                    "data": "Action",  className: "text-center", "render": function (data, type, row) {
+
+                            return '<a href="#" Class="btn btn-sm btn-info" onclick="EditRecordHariLibur(\'' + row.IdHariLibur + '\')" /><i class="bi bi-pencil-square" ></i></a> <a Class="btn btn-sm btn-danger" onclick="DeleteRecordHariLibur(\'' + row.IdHariLibur + '\')"/><i class="bi  bi-eraser-fill" ></i></a>';
+
+                    }
+                },
+            ],
+
+            filter: true,
+            info: true,
+            ordering: true,
+            bLengthChange: false,
+            searching:false,
+            pageLength:10,
+
+         });
+
+         
+
+         $("#InsertDataHariLibur").click(function () {
+            if ($("#formDataHariLibur").valid()) {
+               var dataObj = {
+                    IdHK: $('#IdHK').val(),
+                    TglHariLibur: $('#txtTglHariLibur').val(),
+                    Keterangan: $('#txtKeterangan').val()
+                };
+                $.ajax({
+                    type: "Post",
+                    url: "@Url.Action("InsertData", "HariLibur")",
+                    data: JSON.stringify(dataObj),
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        //debugger;
+                        if (!data.Status) {
+                            Swal.fire({ icon: "error", title: data.Message, showConfirmButton: false, timer: 2000 });
+                        } else {
+                            Swal.fire({ icon: "success", title: "Data Saved Success!", showConfirmButton: false, timer: 2000 });
+                            loadDataHariLibur();
+                            $('#hktab').hide();
+                            $('#hltab').show();
+                        }
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                         alert(xhr.responseText);
+                    }
+                })
+            }
+
+         });
+
+        $("#UpdateDataHariLibur").click(function () {
+            if ($("#formDataHariLibur").valid()) {
+              var dataObj = {
+                    IdHK: $('#IdHK').val(),
+                    IdHariLibur: $('#txtIdHariLibur').val(),
+                    TglHariLibur: $('#txtTglHariLibur').val(),
+                    Keterangan: $('#txtKeterangan').val()
+                };
+                $.ajax({
+                    type: "Post",
+                    url: "@Url.Action("UpdateData", "HariLibur")",
+                    data: JSON.stringify(dataObj),
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        //debugger;
+                        if (!data.Status) {
+                            Swal.fire({ icon: "error", title: data.Message, showConfirmButton: false, timer: 2000 });
+                        } else {
+                            Swal.fire({ icon: "success", title: "Data Saved Success!", showConfirmButton: false, timer: 2000 });
+                            loadDataHariLibur(); 
+                            $('#hktab').hide();
+                            $('#hltab').show();
+                        }
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                         alert(xhr.responseText);
+                    }
+                })
+            }
+
+        });
+
+          $("#ConfirmDeleteHariLibur").click(function () {
+                var IdHariLibur = $("#IdHariLibur").val();
+              $.ajax({
+                  type: "Post",
+                  url: '@Url.Action("DeleteData", "HariLibur")?IdHariLibur='+IdHariLibur,
+                        success: function (data) {
+                            debugger;
+                            if (!data.Status) {
+                                window.alert(response.ErrorMessage, 'Warning', { timeOut: 3000, "closeButton": true });
+                            } else {
+                                Swal.fire({ icon: "success", title: "Delete Data Success!", showConfirmButton: false, timer: 1800 });
+                                $("#KonfirmasiDeleteHariLibur").modal("hide");
+                                loadDataHariLibur();
+                                $('#hktab').hide();
+                                $('#hltab').show();
+                            }
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                             alert(xhr.responseText);
+                        }
+                    })
+          });
+         
+
+        $('#CancelDeleteHariLibur').click(() => {
+            $("#KonfirmasiDeleteHariLibur").modal("hide");
+        });
+
+        $('#btnHLTab').click(() => { 
+             $('#hltab').show();
+             $('#hktab').hide();        
+             $('#hltab').addClass('show');
+            $('#hktab').removeClass('show');
+            loadDataHariLibur();
+         });
+
+        $('#btnHKTab').click(() => {
+             $('#hktab').show();
+             $('#hltab').hide();        
+             $('#hktab').addClass('show');
+             $('#hltab').removeClass('show');
+        });
+        
+        $('#CancelDataHariLibur').click(() => {
+           
+            //$('#btnHKTab').show();
+            //$('#btnHLTab').show();
+            //$('#hktab').hide();
+            //$('#hltab').show();
+            $('#dataHariLibur').show(); 
+            $('#inputHariLibur').hide();    
+        });
+        
+    });
+
+
+     // Add New
+    function AddNewData() {
+        resetForm();
+        resetFormHariLibur();
+
+        populateTahun('cboTahun', CurrTahun);
+        populateBulan();
+        
+        $('#btnHKTab').show();
+        $('#btnHLTab').hide();        
+        $('#hktab').show();
+        $('#hltab').hide();        
+        $('#hktab').addClass('show');
+        $('#hltab').removeClass('show');
+        $('#cboTahun').focus();
+        $("#divData").hide();
+        $("#divForm").show();
+        $('#InsertData').show();
+        $('#UpdateData').hide();
+    }
+
+    function populateBulan()
+    {
+        var bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        $('#cboBulan').empty();
+        var value = 1;
+        var awal = 0;
+        var akhir = bulan.length;
+        while (awal < akhir) {
+           $("#cboBulan").append('<option value="' + value + '">' + bulan[awal] + '</option>');
+            awal++;
+            value++;
+        }
+    }
+
+    function populateTahun(cbotahun, tahunGet)
+    {
+        $('#'+cbotahun+'').empty();
+        $('#'+cbotahun+'').append('<option value="" disabled selected>Pilih Tahun</option>');
+        var awal = 2015;
+        var akhir = 2040;
+        while (awal < akhir) {
+            if (tahunGet == awal) {
+                $('#'+cbotahun+'').append('<option value="' + awal + '" selected>' + awal + '</option>');
+            } else {
+                $('#'+cbotahun+'').append('<option value="' + awal + '">' + awal + '</option>');
+            }
+
+            awal++;
+        }
+
+    }
+
+    function resetForm() {
+            var $form = $('#formData');
+            $form.validate().resetForm(); 
+
+            $('#cboTahun').val('');
+            $('#cboBulan').val('');
+            $('#txtHariKerja').val('');
+    }
+
+    function DeleteRecord(id) {
+        $("#IdHK").val(id);
+        $("#KonfirmasiDelete").modal("show");
+    }
+
+    function backForm() {
+        $("#divData").show();
+        $("#divForm").hide();
+    }
+
+    function EditRecord(id) {
+        resetForm();
+        populateTahun('cboTahun', '')
+        populateBulan();
+        var url = '@Url.Action("GetDataByCode", "HariKerja")';
+        var data = "IDHK="+id+"&Tahun="+ $("#cboTahunSearch").val();
+
+        $("#divData").hide();
+        $("#divForm").show();
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: data,
+            success: function (data) {
+                var obj = JSON.parse(data);
+                $("#IdHK").val(obj.IDHK);
+                $("#cboTahun").val(obj.Tahun).trigger("change");
+                $("#cboBulan").val(obj.Bulan).trigger("change");
+                $("#txtHariKerja").val(obj.HariKerja);
+                $('#InsertData').hide();
+                $('#UpdateData').show();
+                loadDataHariLibur();  
+                DateString();
+                $('#btnHKTab').show();
+                $('#btnHLTab').show();        
+                $('#hktab').show();
+                $('#hltab').hide();        
+                $('#hktab').addClass('show');
+                $('#hltab').removeClass('show');
+            }
+        })
+    }
+    
+
+    //Hari Libur 
+
+    function DateString()
+    {
+        
+        var Bulan = $("#cboBulan").val();
+        var Tahun = $("#cboTahun").val();
+
+        var minDate = '01/' + Bulan +'/'+ Tahun;
+        var maxDate = '31/' + Bulan +'/'+ Tahun;
+
+
+        $('.dateselect').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true, 
+            //todayHighlight: true, 
+            startDate: minDate, 
+            maxDate: '3D'
+        });
+    }
+
+    function loadDataHariLibur() {
+            var data = "IdHK="+ $("#IdHK").val();
+            $.ajax({
+                url: '@Url.Action("GetList","HariLibur")',
+                type: "GET",
+                data: data,
+            }).done(function (result) {
+                $('#dataHariLibur').show();
+                $('#inputHariLibur').hide();
+               //$('#divData').hide();
+               //$('#divForm').show();
+                $("#tableIDHariLibur").DataTable().clear();
+                $("#tableIDHariLibur").DataTable().rows.add(result).draw(false);
+                $("#tableIDHariLibur").DataTable().columns.adjust().draw();
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // needs to implement if it fails
+            });
+        }
+    function AddNewDataHariLibur() { 
+        resetFormHariLibur();
+                 
+        $('#btnHKTab').show();
+        $('#btnHLTab').show();
+        $('#hktab').hide();
+        $('#hltab').show();
+        $('#dataHariLibur').hide(); 
+        $('#inputHariLibur').show(); 
+        $('#txtTglHariLibur').focus();
+        $("#divData").hide();
+        $("#divForm").show(); 
+        $("#InsertDataHariLibur").show(); 
+        $("#UpdateDataHariLibur").hide();  
+    }
+
+    function resetFormHariLibur() {
+            var $form = $('#formDataHariLibur');
+            $form.validate().resetForm(); 
+
+            $('#txtIdHariLibur').val('');
+            $('#txtTglHariLibur').val('');
+            $('#txtKeterangan').val('');
+    }
+
+    function DeleteRecordHariLibur(id) {
+        $("#IdHariLibur").val(id);
+        $("#KonfirmasiDeleteHariLibur").modal("show");
+    }
+    function backFormHariLibur() {
+        $("#divData").hide();
+        $("#divForm").show();
+        $('#hktab').show();
+        $('#hltab').hide();
+        $('#dataHariLibur').show();
+        $('#inputHariLibur').hide();
+    }
+
+    
+    function EditRecordHariLibur(id) {
+        resetFormHariLibur();
+        var url = '@Url.Action("GetDataByCode", "HariLibur")';
+        var data = "IdHariLibur="+id+"&IDHK="+$("#IdHK").val();
+
+        $("#divData").hide();
+        $("#divForm").show();
+        $("#data").show();
+        $('#dataHariLibur').hide();
+        $('#inputHariLibur').show();
+
+
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: data,
+            success: function (data) {
+                var obj = JSON.parse(data);
+                $("#IdHK").val(obj.IDHK);
+                $("#txtIdHariLibur").val(obj.IdHariLibur);
+                $("#txtTglHariLibur").val(obj.TglHariLibur);
+                $("#txtKeterangan").val(obj.Keterangan);
+                $('#InsertDataHariLibur').hide();
+                $('#UpdateDataHariLibur').show();
+                DateString(); 
+            }
+        })
+    }
+    
+</script>
